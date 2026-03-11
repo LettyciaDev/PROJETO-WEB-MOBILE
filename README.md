@@ -1,4 +1,4 @@
-# O nome que ainda vai ser definido
+# CARDAPIA
 
 Aqui fica a descrição
 
@@ -14,7 +14,6 @@ Aqui fica a descrição
 
 ### 2. Front-end (node.js)
 
-* cd front-end
 * cd cardapia
 * npm install
 * npm run dev
