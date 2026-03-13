@@ -6,4 +6,5 @@ from schemas.schemas_cardapia import (passo_schema,
                                       receita_ingred_sch)
 
 def get_receita(db: Session, receita_id: int):
-    return db.query(model.Receita).filter(model.Receita.id == receita_id).first()
+    return db.query(model.Receita).all()
+
