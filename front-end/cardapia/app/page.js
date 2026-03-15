@@ -3,40 +3,41 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <main className="landing-container">
-      <section className="hero">
-
-        {/* Título */}
-        <h1 className="logo">Cardapia</h1>
-
-        {/* Imagem */}
-        <div className="hero-image">
+    <main className="page-background">
+      <div className="card">
+        <div className="esquerda">
           <Image
-            src="/comida.png"
+            src="/imagens/cardapialogo.jpeg"
             alt="Ilustração de receitas"
-            width={300}
-            height={300}
+            width={350}
+            height={350}
           />
         </div>
+        <div className="direita">
+          <h1>Cardapia</h1>
+          <div className="hero-text">
+            <h2>
+              Sua despensa pode ser o ponto de partida para receitas incríveis!
+            </h2>
+            <p>
+              Faça seu login ou cadastre-se e aproveite a experiência.
+            </p>
+          </div>
 
-        {/* Texto */}
-        <div className="hero-text">
-          <h2>Sua despensa pode ser o ponto de partida para receitas incríveis!</h2>
-          <p>Faça seu login ou cadastre-se e aproveite a experiência.</p>
+          <div className="actions">
+            <Link href="/entrar" className="btn-login">
+              Entrar
+            </Link>
+
+            <Link href="/cadastro" className="btn-registro">
+              Cadastrar
+            </Link>
+          </div>
+
         </div>
 
-        {/* Botões que redirecionam */}
-        <div className="actions">
-          <Link href="/login" className="btn-login">
-            Entrar
-          </Link>
+      </div>
 
-          <Link href="/cadastro" className="btn-register">
-            Cadastrar
-          </Link>
-        </div>
-
-      </section>
     </main>
   );
 }
