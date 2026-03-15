@@ -23,66 +23,87 @@
 
 body {
   font-family: var(--font-poppins), sans-serif;
-  color: #fff;
+  color: var(--color-primary);
 }
 
-.landing-container {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.page-background{
+  height:100vh;
+  background: var(--color-primary-light); /* cor do fundo */
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
 }
 
-.hero {
-  text-align: center;
-  max-width: 500px;
-  padding: 2rem;
+.card{
+  background:rgb(243, 232, 211);
+  padding:40px;
+  border-radius:20px;
+  display:flex;
+  gap:30px;
+  align-items:center;
 }
 
-.logo {
-  font-size: 3rem;
-  color: var(--color-primary-dark);
-  margin-bottom: 1rem;
+.esquerda{
+  flex:1;
+  display:flex;
+  justify-content:center;
 }
 
-.hero-text h2 {
-  font-size: 1.4rem;
-  margin-bottom: 0.5rem;
+.direita{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  gap:20px;
 }
 
-.hero-text p {
-  color: #555;
-  margin-bottom: 2rem;
+.direita h1 {
+  font-size: 60px;
 }
 
-.actions {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
+.actions{
+  display:flex;
+  gap:15px;
 }
 
-.btn-login {
-  padding: 0.8rem 1.6rem;
-  border-radius: 8px;
-  border: 2px solid var(--color-primary);
-  color: var(--color-primary-dark);
-  text-decoration: none;
-  font-weight: 600;
+/*AQUIIIIIIIIII*/
+
+.actions{
+  display:flex;
+  gap:16px;
+  margin-top:20px;
 }
 
-.btn-register {
-  padding: 0.8rem 1.6rem;
-  border-radius: 8px;
-  background: var(--color-primary);
-  color: white;
-  text-decoration: none;
-  font-weight: 600;
+.btn-login{
+  padding:12px 28px;
+  background-color:white;
+  color:#4CAF50;
+  border:2px solid #4CAF50;
+  border-radius:8px;
+  text-decoration:none;
+  font-weight:600;
+  transition:0.3s;
 }
 
-.btn-register:hover {
-  background: var(--color-primary-dark);
+.btn-login:hover{
+   background-color:#4CAF50;
+  color:white;
+  transform:translateY(-2px);
 }
 
-.btn-login:hover {
-  background: var(--color-primary-light);
+.btn-registro{
+  padding:12px 28px;
+  background-color:white;
+  color:#4CAF50;
+  border:2px solid #4CAF50;
+  border-radius:8px;
+  text-decoration:none;
+  font-weight:600;
+  transition:0.3s;
+}
+
+.btn-registro:hover{
+  background-color:#4CAF50;
+  color:white;
+  transform:translateY(-2px);
 }
