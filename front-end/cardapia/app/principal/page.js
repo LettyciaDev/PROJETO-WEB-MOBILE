@@ -1,53 +1,68 @@
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./principal.comite.css"
-
+import Navbar  from "../components/navbar";
+import Intro  from "../components/intro"
 export default function Home(){
     return (
         <div className="container">
-          <div className="hero">
-            <div className="hero-container">
-                <div className="hero-description">
-                    <div className="hero-text">
-                        <p>Bem vindo, <span>Usuário</span></p>
-                        <p>Peso Atual: 58.4kg</p>
-                    </div>
-                    <div className="hero-img"><Image src="/user.png" alt="icone perfil" width={50} height={50}/></div>
-                </div>
-            </div>
-          </div>
+
+                <Intro/>
 
                 <div className="main">
+                    <div className="title">
+                            <div className="line"></div>
+                            <h2>HOME</h2>
+                            <div className="line"></div>
+                    </div>
+                    <div className="navbar-desk">
+                        <ul>
+                            <li className="menu">
+                                <a href="/principal" className="main-box">MENU</a>
+                            </li>
+                            <li>
+                                <a href="/refeicoes/cafe" className="main-box">DICAS</a>
+                            </li>
+                        </ul>
+
+                    </div>            
                     <div className="main-container">
-                        <div className="main-box">
-                            <div className="trapezio"><Image/></div>
-                            <h1>LANCHES</h1>
-                        </div>
-                        <div className="main-box">
-                            <div><Image/></div>
-                            <h1>CAFÉ DA MANHÃ</h1>
-                        </div>
-                        <div className="main-box">
-                            <div><Image/></div>
-                            <h1>ALMOÇO</h1>
-                        </div>
-                        <div className="main-box">
-                            <div><Image/></div>
-                            <h1>JANTA</h1>
-                        </div>
+                        <a href="/refeicoes/lanche" className="main-box">
+                                 <Image src="/lanche.png" alt="lanche" width={90} height={90}/>
+                                 <div className="box-text">
+                                     <h1>LANCHES</h1>
+                                    <p>ver receitas</p>
+                                 </div>
+                                 <Image src="/setadir.png" alt="seta direita" width={30} height={30}/>       
+                        </a>
+                        <a href="/refeicoes/cafe" className="main-box">
+                            <Image src="/cafe.png" alt="cafe da manhã" width={90} height={90}/>
+                            <div className="box-text">
+                                <h1>Café da manhã</h1>
+                                <p>ver receitas</p>
+                            </div>
+                            <Image src="/setadir.png" alt="seta direita" width={30} height={30}/>
+                        </a>
+                        <a href="/refeicoes/almoco" className="main-box">
+                           <Image src="/almoco.png" alt="almoço" width={90} height={90}/>
+                           <div className="box-text">
+                                <h1>Almoço</h1>
+                                <p>ver receitas</p>
+                           </div>
+                          <Image src="/setadir.png" alt="seta direita" width={30} height={30}/>
+                        </a>
+                        <a href="/refeicoes/janta" className="main-box">
+                           <Image src="/janta.png" alt="janta" width={90} height={90}/>
+                           <div className="box-text">
+                               <h1>Janta</h1>
+                                <p>ver receitas</p>
+                           </div>
+                           <Image src="/setadir.png" alt="seta direita" width={30} height={30}/>
+                        </a>
                     </div>
                 </div>
 
-                <div className="navbar">
-                    <div className="navbar-container">
-                        <Image src="/home.png" alt="home" width={40} height={40}/>
-                        <p>MENU</p>              
-                    </div>
-                    <div  className="navbar-container">
-                        <Image src="/tip.png" alt="tip" width={40} height={40}/>
-                        <p>DICAS</p>
-                    </div>
-                </div>            
+                <Navbar />
        
         </div>
     );
