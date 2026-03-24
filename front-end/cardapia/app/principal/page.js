@@ -11,19 +11,19 @@ export default function Home() {
       <div className="main">
         <div className="title">
           <div className="line"></div>
-          <h2>HOME</h2>
+          <h2>Home</h2>
           <div className="line"></div>
         </div>
         <div className="navbar-desk">
           <ul>
-            <li className="menu">
+            <li className="">
               <a href="/principal" className="main-box">
-                MENU
+                <p className="box-text">Home</p>
               </a>
             </li>
             <li>
               <a href="/dicas" className="main-box">
-                DICAS
+                <p className="box-text">Dicas</p>
               </a>
             </li>
           </ul>
