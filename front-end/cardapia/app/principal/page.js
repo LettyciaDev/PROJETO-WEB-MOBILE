@@ -22,7 +22,7 @@ export default function Home() {
               </a>
             </li>
             <li>
-              <a href="/refeicoes/cafe" className="main-box">
+              <a href="/dicas" className="main-box">
                 DICAS
               </a>
             </li>
