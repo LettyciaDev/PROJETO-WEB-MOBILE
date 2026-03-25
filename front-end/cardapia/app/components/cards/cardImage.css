@@ -5,4 +5,20 @@
   margin-top: 40px;
   margin-left: 50px;
   margin-right: 50px;
+  text-decoration: none;
+}
+
+.cards:hover {
+  transform: scale(1.05);
+  transition: transform 0.3s ease;
+}
+
+.link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.link:visited {
+  text-decoration: none;
+  color: inherit;
 }
