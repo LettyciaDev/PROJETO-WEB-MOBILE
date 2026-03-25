@@ -1,16 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
-
+import styles from "@/app/principal/principal.module.css"
 export default function Navbar() {
   return (
-    <div className="navbar">
+    <div className={styles["navbar-desk"]}>
       <a href="/principal" className="navbar-container">
-        <Image src="/home.png" alt="home" width={20} height={20} />
-        <p>MENU</p>
+         MENU
       </a>
       <a href="/dicas" className="navbar-container">
-        <Image src="/tip.png" alt="tip" width={20} height={20} />
-        <p>DICAS</p>
+        DICAS
       </a>
     </div>
   );

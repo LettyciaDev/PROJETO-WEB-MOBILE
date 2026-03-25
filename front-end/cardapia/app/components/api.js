@@ -1,8 +1,8 @@
 // lib/api.js
 const API_URL = 'https://parseapi.back4app.com/classes/Receita';
 const HEADERS = {
-  'X-Parse-Application-Id': '',
-  'X-Parse-REST-API-Key': '',
+  'X-Parse-Application-Id': 'EIu3PnOecajB0V7MfEB2lEHqiIlVgtwdqo4VLYJj',
+  'X-Parse-REST-API-Key': 'YgMS5AjIXUgVt3nqnZN7IO3f1xOlHqST4CBulT9A',
   'Content-Type': 'application/json',
 };
 

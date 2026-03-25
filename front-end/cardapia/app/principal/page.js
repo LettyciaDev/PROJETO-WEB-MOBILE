@@ -71,6 +71,17 @@ export default function Home() {
         </div>
       </div>
 
+      <div className={styles["navbar"]}>
+          <div className="navbar-container">
+                  <Image src="/home.png" alt="home" width={40} height={40}/>
+                  <p>MENU</p>              
+          </div>
+          <div  className="navbar-container">
+                  <Image src="/tip.png" alt="tip" width={40} height={40}/>
+                  <p>DICAS</p>
+          </div>
+      </div>            
+
       <Navbar />
     </div>
   );
