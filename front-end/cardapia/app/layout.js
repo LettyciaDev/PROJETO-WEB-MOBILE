@@ -1,5 +1,6 @@
 import { Poppins } from "next/font/google";
 import "./globals.css";
+import Providers from './providers'
 
 export const metadata = {
   title: "Cardapia",
@@ -16,9 +17,14 @@ const poppins = Poppins({
 });
 
 export default function RootLayout({ children }) {
+
   return (
     <html lang="pt-br">
-      <body className={`${poppins.variable} font-sans`}>{children}</body>
+      <body className={`${poppins.variable} font-sans`}>
+          <Providers>
+            {children}
+         </Providers>
+      </body>
     </html>
   );
 }
