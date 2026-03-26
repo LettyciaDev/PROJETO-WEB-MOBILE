@@ -17,3 +17,5 @@ Aqui fica a descrição
 * cd cardapia
 * npm install
 * npm run dev
+
+.
