@@ -3,10 +3,12 @@
 import { useState } from "react";
 import Button from "@/app/components/button";
 import styles from './poupia.module.css';
+import { salvarReceita } from "./api";
 
-export default function PopupIA() {
+export default function PopupIA({ tipo }) {
   const [mostrar, setMostrar] = useState(false);
   const [texto, setTexto] = useState("");
+  const [receita, setReceita] = useState(null);
 
   const abrirCaixa = () => setMostrar(true);
 
@@ -19,34 +21,30 @@ export default function PopupIA() {
         .filter(item => item !== "")
         .join(", ");
 
-        const prompt = `Aja como nutricionista. Crie uma receita saudável com: ${listaLimpa}. 
-    Retorne EXCLUSIVAMENTE um JSON válido.
-    NÃO inclua explicações, apenas o JSON puro:
-    { "titulo": "string", "ingredientes": ["string"], "instrucao": ["string"], "tempo_preparo": "string", "calorias": number }`;
-
-        console.log(prompt); 
+     
 
         const response = await fetch("/api/gemini", {
         method: "POST",
         headers: {
-            "Content-Type": "application/json"
+          "Content-Type": "application/json"
         },
-        body: JSON.stringify({ prompt })
-        });
+        body: JSON.stringify({ 
+          ingredientes: listaLimpa 
+        }),
+      });
 
-        const data = await response.json();
-        console.log(data);
+      const data = await response.json();
 
-    } catch (error) {
-        console.error("Erro:", error);
-    }
-
+      console.log("RESPOSTA BRUTA:", data);
+  
+      setMostrar(false)
+      setReceita(data);
+      setTexto("");
     
-    console.log("Mensagem enviada:", texto);
-    setTexto("");
-    setMostrar(false);
-    
-    };
+  } catch (error) {
+    console.error("Erro:", error);
+  }
+ };
 
   return (
     <>
@@ -77,6 +75,41 @@ export default function PopupIA() {
             rows={1}
           />
           <button  className={styles.botaoEnviar} onClick={enviar}>Gerar</button>
+        </div>
+      )}
+
+      {receita && (
+        <div className={styles.popupResultado}>
+          
+          <h2>{receita.titulo}</h2>
+
+          <h4>Ingredientes:</h4>
+          <ul>
+            {receita.ingredientes.map((item, i) => (
+              <li key={i}>{item}</li>
+            ))}
+          </ul>
+
+          <h4>Modo de preparo:</h4>
+          <ol>
+            {receita.instrucao.map((item, i) => (
+              <li key={i}>{item}</li>
+            ))}
+          </ol>
+
+          <p><strong>Tempo:</strong> {receita.tempo_preparo}</p>
+          <p><strong>Calorias:</strong> {receita.calorias}</p>
+
+          <div className={styles.botoes}>
+            <button onClick={() => salvarReceita(receita, tipo)}>
+               Salvar
+            </button>
+
+            <button onClick={() => setReceita(null)}>
+              Cancelar
+            </button>
+          </div>
+
         </div>
       )}
     </>

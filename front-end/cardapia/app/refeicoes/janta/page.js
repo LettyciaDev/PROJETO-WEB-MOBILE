@@ -8,8 +8,8 @@ export default function Page({ params }) {
 
   return (
     <>
-      <PaginaCategoria tipo="lanche" />
-      <PopupIA />
+      <PaginaCategoria tipo="janta" />
+      <PopupIA tipo="janta" />
     </>
   );
 }

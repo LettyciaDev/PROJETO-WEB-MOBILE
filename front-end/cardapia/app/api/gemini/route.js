@@ -1,50 +1,76 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextResponse } from "next/server";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-console.log("API KEY:", process.env.GEMINI_API_KEY);
 export async function POST(req) {
   try {
-    const body = await req.json();
-    const prompt = body.prompt;
+    const { ingredientes } = await req.json();
 
-    if (!prompt) {
-      return NextResponse.json({ erro: "Prompt vazio" });
+    if (!ingredientes) {
+      return NextResponse.json(
+        { erro: "Ingredientes não fornecidos" },
+        { status: 400 }
+      );
     }
 
-    const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-flash"
-    });
+    const prompt = `Aja como nutricionista. Crie uma receita saudável com: ${ingredientes}.
+    Retorne EXCLUSIVAMENTE um JSON válido. NÃO inclua explicações.
+    Formato:
+    {
+      "titulo": "string",
+      "ingredientes": ["string"],
+      "instrucao": ["string"],
+      "tempo_preparo": "string",
+      "calorias": 0
+    }`;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    let text = response.text();
+    const response = await fetch(
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-goog-api-key": "", 
+        },
+        body: JSON.stringify({
+          contents: [
+            {
+              parts: [{ text: prompt }],
+            },
+          ],
+        }),
+      }
+    );
 
-    console.log("RESPOSTA GEMINI:", text); // 👈 DEBUG
+    const data = await response.json();
 
-    text = text
-      .replace(/```json/g, "")
-      .replace(/```/g, "")
-      .trim();
+    console.log("RESPOSTA BRUTA:", JSON.stringify(data, null, 2));
+    if (data.error) {
+      console.error("ERRO DA GOOGLE API:", data.error);
+      return NextResponse.json(
+        { erro: data.error.message },
+        { status: 500 }
+      );
+    }
 
-    let json;
+    const text =
+      data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
 
     try {
-      json = JSON.parse(text);
-    } catch (err) {
-      return NextResponse.json({
-        erro: "JSON inválido",
-        resposta: text
-      });
+      const json = JSON.parse(text);
+      return NextResponse.json(json);
+    } catch {
+      return NextResponse.json(
+        {
+          erro: "Resposta não veio em JSON",
+          resposta: text,
+        },
+        { status: 500 }
+      );
     }
-
-    return NextResponse.json(json);
-
   } catch (error) {
-    console.error("ERRO REAL:", error); // 👈 AQUI ESTÁ A VERDADE
+    console.error("ERRO:", error);
 
     return NextResponse.json(
-      { erro: error.message || "Erro desconhecido" },
+      { erro: error.message },
       { status: 500 }
     );
   }

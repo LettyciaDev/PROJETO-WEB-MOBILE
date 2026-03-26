@@ -9,7 +9,7 @@ export default function Page({ params }) {
   return (
     <>
       <PaginaCategoria tipo="cafe" />
-      <PopupIA />
+      <PopupIA tipo="cafe" />
     </>
   );
 }
