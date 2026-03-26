@@ -1,14 +1,40 @@
 "use client"
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import Parse from 'parse';
+
+const APP_ID = '';
+const JS_KEY = ''; 
+Parse.initialize(APP_ID, JS_KEY);
+Parse.serverURL = 'https://parseapi.back4app.com/';
 
 export default function Intro() {
   const [isEditing, setIsEditing] = useState(false);
+  const [username, setUsername] = useState("Usuário");
   const [userData, setUserData] = useState({
     peso: "58.4kg",
     exercicio: "3x/semana",
     objetivo: "ganhar massa muscular"
   });
+
+  useEffect(() => {
+    async function checkUser() {
+      try {
+        // O currentAsync é mais seguro para garantir que a sessão foi lida
+        const currentUser = await Parse.User.currentAsync();
+        if (currentUser) {
+          console.log("Usuário encontrado:", currentUser.get("username"));
+          setUsername(currentUser.get("username"));
+        } else {
+          console.log("Nenhum usuário logado no momento.");
+        }
+      } catch (error) {
+        console.error("Erro ao buscar usuário:", error);
+      }
+    }
+
+    checkUser();
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -23,7 +49,7 @@ export default function Intro() {
             <div className="intro-img">
               <Image src="/user.png" alt="icone perfil" width={40} height={40} />
             </div>
-            <h3><span>Bem vindo,</span> Usuário</h3>
+            <h3><span>Bem vindo,</span> {username}</h3>
             
             <button onClick={() => setIsEditing(!isEditing)}>
               <Image 
