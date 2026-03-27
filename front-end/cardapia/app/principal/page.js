@@ -71,13 +71,17 @@ export default function Home() {
       </div>
 
       <div className={styles["navbar"]}>
-          <div className={styles["navbar-container"]}>
-                  <Image src="/home.png" alt="home" width={40} height={40}/>
-                  <p>MENU</p>              
+          <div className={styles["navbar-container"]}>       
+                   <Link href="/principal" className={styles["main-box"]}>
+                      <Image src="/home.png" alt="home" width={40} height={40}/>
+                      <p>MENU</p>
+                  </Link>       
           </div>
           <div  className={styles["navbar-container"]}>
-                  <Image src="/tip.png" alt="tip" width={40} height={40}/>
-                  <p>DICAS</p>
+                  <Link href="/dicas" className={styles["main-box"]}>
+                      <Image src="/tip.png" alt="tip" width={40} height={40}/>
+                      <p>DICAS</p>
+                  </Link>
           </div>
       </div>            
     </div>
