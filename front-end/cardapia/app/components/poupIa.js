@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Button from "@/app/components/button";
 import styles from './poupia.module.css';
-import { salvarReceita } from "./api";
+import { prepararESalvarReceita } from "@/lib/utils/formatarReceita";
 
 export default function PopupIA({ tipo }) {
   const [mostrar, setMostrar] = useState(false);
@@ -101,7 +101,7 @@ export default function PopupIA({ tipo }) {
           <p><strong>Calorias:</strong> {receita.calorias}</p>
 
           <div className={styles.botoes}>
-            <button onClick={() => salvarReceita(receita, tipo)}>
+            <button onClick={async() => await prepararESalvarReceita(receita, tipo)}>
                Salvar
             </button>
 
