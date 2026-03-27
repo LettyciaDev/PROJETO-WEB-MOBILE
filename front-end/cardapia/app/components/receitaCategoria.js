@@ -7,6 +7,7 @@ import {
   atualizarReceita,
 } from "@/lib/api";
 import Image from "next/image";
+import styles from "@/app/principal/principal.module.css"
 
 export default function PaginaCategoria({ tipo }) {
   const queryClient = useQueryClient();
@@ -46,10 +47,40 @@ export default function PaginaCategoria({ tipo }) {
 
   const listaDeReceitas = data || [];
 
+
+
   return (
     <div style={{ display: "flex", flexDirection: "column", padding: "20px" }}>
-      <h2>Receitas: {tipo}</h2>
+      <div
+        style={{
+          margin: "5% 0",
+          color: "#575656",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          width: "100%",
+          gap: "5%",
+        }}
+      >
+        <div
+          style={{
+            width: "40%",
+            height: "2px",
+            backgroundColor: "#575656",
+          }}
+        ></div>
 
+        <h2>{tipo}</h2>
+
+        <div
+          style={{
+            width: "40%",
+            height: "2px",
+            backgroundColor: "#575656",
+          }}
+        ></div>
+      </div>
+      
       <div style={{ display: "grid", gap: "15px" }}>
         {listaDeReceitas.map((receita) => (
           <div
@@ -85,7 +116,22 @@ export default function PaginaCategoria({ tipo }) {
               </div>
             </div>
 
-            <button onClick={() => setReceitaSelecionada(receita)}>
+            <button
+              onClick={() => setReceitaSelecionada(receita)}
+              style={{
+                marginTop: "10px",
+                padding: "10px 16px",
+                borderRadius: "8px",
+                border: "none",
+                background: "linear-gradient(135deg, #00e67b, #059150)",
+                color: "white",
+                fontWeight: "600",
+                cursor: "pointer",
+                transition: "0.3s",
+              }}
+              onMouseOver={(e) => (e.target.style.opacity = "0.85")}
+              onMouseOut={(e) => (e.target.style.opacity = "1")}
+            >
               Ver Receita
             </button>
           </div>

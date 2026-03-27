@@ -101,7 +101,7 @@ export default function PopupIA({ tipo }) {
           <p><strong>Calorias:</strong> {receita.calorias}</p>
 
           <div className={styles.botoes}>
-            <button onClick={async() => await prepararESalvarReceita(receita, tipo)}>
+            <button onClick={async() => {await prepararESalvarReceita(receita, tipo); setReceita(null);}}>
                Salvar
             </button>
 

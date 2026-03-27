@@ -1,5 +1,4 @@
 import { Poppins } from "next/font/google";
-import "./refeicoes.css";
 import Intro from "../components/intro";
 
 export default function RootLayout({ children }) {
