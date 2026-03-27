@@ -1,25 +1,24 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import styles from "./principal.module.css";
 import Navbar from "../components/navbar";
 import Intro from "../components/intro";
-
+import styles from "../principal/principal.module.css"
 export default function Home() {
   return (
-    <div className={styles.container}>
+    <div className="container">
       <Intro />
 
-      <div className={styles.main}>
-        <div className={styles.title}>
-          <div className={styles.line}></div>
+      <div className="main">
+        <div className="title">
+          <div className="line"></div>
           <h2>HOME</h2>
-          <div className={styles.line}></div>
+          <div className="line"></div>
         </div>
 
         <div className={styles["navbar-desk"]}>
           <ul>
-            <li className={styles.menu}>
+            <li className={styles["menu"]}>
               <Link href="/principal" className={styles["main-box"]}>
                 MENU
               </Link>
@@ -72,17 +71,15 @@ export default function Home() {
       </div>
 
       <div className={styles["navbar"]}>
-          <div className="navbar-container">
+          <div className={styles["navbar-container"]}>
                   <Image src="/home.png" alt="home" width={40} height={40}/>
                   <p>MENU</p>              
           </div>
-          <div  className="navbar-container">
+          <div  className={styles["navbar-container"]}>
                   <Image src="/tip.png" alt="tip" width={40} height={40}/>
                   <p>DICAS</p>
           </div>
       </div>            
-
-      <Navbar />
     </div>
   );
 }
