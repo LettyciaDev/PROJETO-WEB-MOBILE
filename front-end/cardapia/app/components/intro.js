@@ -1,16 +1,21 @@
 "use client"
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import Parse from 'parse';
 
-const APP_ID = '';
-const JS_KEY = ''; 
+const APP_ID = 'nacEQNOlY9wAtonJpl6RwipjP4llln00qLmVat4p';
+const JS_KEY = 'jTtBnuRudxFDjYVfsDxpMYDdUNUvYvHuQempq0Po'; 
 Parse.initialize(APP_ID, JS_KEY);
 Parse.serverURL = 'https://parseapi.back4app.com/';
 
 export default function Intro() {
   const [isEditing, setIsEditing] = useState(false);
   const [username, setUsername] = useState("Usuário");
+  const [email, setEmail] = useState("");
+  const [showDropdown, setShowDropdown] = useState(false);
+  const router = useRouter();
+
   const [userData, setUserData] = useState({
     peso: "58.4kg",
     exercicio: "3x/semana",
@@ -20,11 +25,12 @@ export default function Intro() {
   useEffect(() => {
     async function checkUser() {
       try {
-        // O currentAsync é mais seguro para garantir que a sessão foi lida
+       
         const currentUser = await Parse.User.currentAsync();
         if (currentUser) {
           console.log("Usuário encontrado:", currentUser.get("username"));
           setUsername(currentUser.get("username"));
+          setEmail(currentUser.get("email") || "E-mail não cadastrado");
         } else {
           console.log("Nenhum usuário logado no momento.");
         }
@@ -35,6 +41,15 @@ export default function Intro() {
 
     checkUser();
   }, []);
+  const handleLogout = async () => {
+    try {
+      await Parse.User.logOut(); 
+      router.push('/cadastro');
+    } catch (error) {
+      console.error("Erro ao sair:", error);
+      alert("Não foi possível deslogar.");
+    }
+  }
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -45,16 +60,42 @@ export default function Intro() {
     <div className="box-intro">
       <div className="intro-container">
         <div className="intro-description">
-          <div className="intro-user">
-            <div className="intro-img">
-              <Image src="/user.png" alt="icone perfil" width={40} height={40} />
-            </div>
+          <div className="intro-user" style={{ position: 'relative' }}>
+            
+            <button 
+              onClick={() => setShowDropdown(!showDropdown)} 
+              style={{ 
+                background: 'none', 
+                border: 'none', 
+                padding: 0, 
+                cursor: 'pointer' 
+              }}
+            >
+              <div className="intro-img">
+                <Image src="/user.png" alt="icone perfil" width={40} height={40} />
+              </div>
+            </button>
+
+            
+            {showDropdown && (
+              <div className="user-dropdown-menu">
+                <div className="dropdown-info">
+                  <strong>{username}</strong>
+                  <span>{email}</span>
+                </div>
+                <hr />
+                <button onClick={handleLogout} className="btn-logout">
+                  Sair da conta
+                </button>
+              </div>
+            )}
+            
             <h3><span>Bem vindo,</span> {username}</h3>
             
             <button onClick={() => setIsEditing(!isEditing)}>
               <Image 
                 className="user-edit" 
-                src={isEditing ? "/edit-white.png" : "/edit-white.png"} 
+                src="/edit-white.png" 
                 alt="icone edit" 
                 width={30} 
                 height={30} 
