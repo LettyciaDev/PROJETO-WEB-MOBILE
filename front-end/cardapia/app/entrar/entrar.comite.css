@@ -3,30 +3,35 @@ body {
   color: var(--color-primary);
 }
 
+/* Fundo da página */
 .page-background {
   height: 100vh;
-  background: var(--color-primary-light); /* cor do fundo */
+  background: var(--color-primary-light);
 
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
+/* Card principal */
 .card {
   background: rgb(243, 232, 211);
   padding: 40px;
   border-radius: 20px;
+
   display: flex;
   gap: 30px;
   align-items: center;
 }
 
+/* Lado esquerdo (imagem) */
 .esquerda {
   flex: 1;
   display: flex;
   justify-content: center;
 }
 
+/* Lado direito */
 .direita {
   flex: 1;
   display: flex;
@@ -35,52 +40,49 @@ body {
 }
 
 .direita h1 {
-  font-size: 60px;
+  font-size: 42px;
 }
 
-.actions {
+/* Inputs */
+.inputs {
   display: flex;
-  gap: 15px;
+  flex-direction: column;
+  gap: 12px;
 }
 
-/*AQUIIIIIIIIII*/
-
-.actions {
-  display: flex;
-  gap: 16px;
-  margin-top: 20px;
-}
-
-.btn-login {
-  padding: 12px 28px;
-  background-color: white;
-  color: #4caf50;
-  border: 2px solid #4caf50;
+.inputs input {
+  padding: 12px;
   border-radius: 8px;
-  text-decoration: none;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  outline: none;
+  transition: 0.2s;
+}
+
+.inputs input:focus {
+  border-color: #4caf50;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+}
+
+/* Botões */
+.actions {
+  display: flex;
+  margin-top: 10px;
+}
+
+/* Botão principal */
+.btn-principal {
+  padding: 12px 28px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 8px;
   font-weight: 600;
+  cursor: pointer;
   transition: 0.3s;
 }
 
-.btn-login:hover {
-  background-color: #4caf50;
-  color: white;
-  transform: translateY(-2px);
-}
-
-.btn-registro {
-  padding: 12px 28px;
-  background-color: white;
-  color: #4caf50;
-  border: 2px solid #4caf50;
-  border-radius: 8px;
-  text-decoration: none;
-  font-weight: 600;
-  transition: 0.3s;
-}
-
-.btn-registro:hover {
-  background-color: #4caf50;
-  color: white;
+.btn-principal:hover {
+  background-color: #43a047;
   transform: translateY(-2px);
 }
