@@ -9,14 +9,13 @@ export default function Home() {
   const [senha, setSenha] = useState("");
 
   async function handleLogin() {
-    // 🔹 Validação simples
     if (!email || !senha) {
       alert("Preencha todos os campos!");
       return;
     }
 
     try {
-      const response = await fetch("URL_DO_ENDPOINT_AQUI", {
+      const response = await fetch("https://parseapi.back4app.com/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
