@@ -86,3 +86,123 @@ body {
   background-color: #43a047;
   transform: translateY(-2px);
 }
+
+
+.btn-login {
+  padding: 12px 28px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-login:hover {
+  background-color: #43a047;
+  transform: translateY(-2px);
+}
+
+.btn-registro {
+  padding: 12px 28px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-registro:hover {
+  background-color: #43a047;
+  transform: translateY(-2px);
+}
+
+
+
+
+/* ================= RESPONSIVIDADE ================= */
+
+/* Tablets */
+@media (max-width: 1024px) {
+  .card {
+    padding: 30px;
+    gap: 20px;
+  }
+
+  .direita h1 {
+    font-size: 32px;
+  }
+}
+
+/* Celulares */
+@media (max-width: 768px) {
+  .page-background {
+    padding: 20px;
+    height: auto;
+  }
+
+  .card {
+    flex-direction: column; /* 🔥 muda layout */
+    width: 100%;
+    padding: 25px;
+    text-align: center;
+  }
+
+  .esquerda {
+    width: 100%;
+  }
+
+  .esquerda img {
+    width: 200px;
+    height: auto;
+  }
+
+  .direita {
+    width: 100%;
+    align-items: center;
+  }
+
+  .direita h1 {
+    font-size: 26px;
+  }
+
+  .inputs {
+    width: 100%;
+  }
+
+  .inputs input {
+    width: 100%;
+  }
+
+  .actions {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .btn-principal {
+    width: 100%;
+  }
+}
+
+/* Celulares pequenos */
+@media (max-width: 480px) {
+  .card {
+    padding: 20px;
+  }
+
+  .direita h1 {
+    font-size: 22px;
+  }
+
+  .esquerda img {
+    width: 160px;
+  }
+
+  .btn-principal {
+    padding: 10px;
+    font-size: 14px;
+  }
+}

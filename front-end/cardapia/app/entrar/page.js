@@ -1,8 +1,10 @@
-"use client"; // necessário no Next.js (App Router)
+"use client";
 
 import { useState } from "react";
 import Image from "next/image";
 import "./entrar.comite.css";
+
+import { API_URL, HEADERS } from "../back4app";
 
 export default function Home() {
   const [email, setEmail] = useState("");
@@ -15,14 +17,12 @@ export default function Home() {
     }
 
     try {
-      const response = await fetch("https://parseapi.back4app.com/login", {
+      const response = await fetch(API_URL, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: HEADERS,
         body: JSON.stringify({
-          email: email,
-          senha: senha,
+          username: email,  
+          password: senha,  
         }),
       });
 
@@ -32,10 +32,9 @@ export default function Home() {
         alert("Login realizado com sucesso!");
         console.log(data);
 
-        // redirecionar se quiser
         window.location.href = "/principal";
       } else {
-        alert(data.message || "Erro ao fazer login");
+        alert(data.error || "Erro ao fazer login");
       }
     } catch (error) {
       console.error(error);
@@ -79,9 +78,6 @@ export default function Home() {
               Entrar
             </button>
           </div>
-          <div>
-            
-            </div>
         </div>
       </div>
     </main>
