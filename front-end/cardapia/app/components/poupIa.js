@@ -1,115 +1,145 @@
-"use client"
+"use client";
 
-import { useState } from "react";
-import Button from "@/app/components/button";
-import styles from './poupia.module.css';
+import React, { useState } from "react";
 import { prepararESalvarReceita } from "@/lib/utils/formatarReceita";
+import styles from "./poupia.module.css";
 
 export default function PopupIA({ tipo }) {
   const [mostrar, setMostrar] = useState(false);
   const [texto, setTexto] = useState("");
   const [receita, setReceita] = useState(null);
-
-  const abrirCaixa = () => setMostrar(true);
+  const [carregando, setCarregando] = useState(false);
+  const [salvando, setSalvando] = useState(false);
 
   const enviar = async () => {
+    const listaLimpa = texto
+      .split("\n")
+      .map((i) => i.trim())
+      .filter(Boolean)
+      .join(", ");
+
+    if (!listaLimpa) return;
 
     try {
-        const listaLimpa = texto
-        .split("\n")
-        .map(item => item.trim())
-        .filter(item => item !== "")
-        .join(", ");
-
-     
-
-        const response = await fetch("/api/gemini", {
+      setCarregando(true);
+      const res = await fetch("/api/gemini", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ 
-          ingredientes: listaLimpa 
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ingredientes: listaLimpa }),
       });
-
-      const data = await response.json();
-
-      console.log("RESPOSTA BRUTA:", data);
-  
-      setMostrar(false)
+      
+      const data = await res.json();
       setReceita(data);
-      setTexto("");
-    
-  } catch (error) {
-    console.error("Erro:", error);
-  }
- };
+      setMostrar(false); 
+      setTexto("");      
+    } catch (err) {
+      console.error("Erro ao gerar receita:", err);
+    } finally {
+      setCarregando(false);
+    }
+  };
+
+  const salvar = async () => {
+    try {
+      setSalvando(true);
+      await prepararESalvarReceita(receita, tipo);
+      setReceita(null); // Fecha o resultado após salvar
+    } catch (err) {
+      console.error("Erro ao salvar:", err);
+    } finally {
+      setSalvando(false);
+    }
+  };
 
   return (
     <>
-      <Button onClick={abrirCaixa}>IA</Button>
+      <button 
+        className={styles.fab} 
+        onClick={() => setMostrar(true)} 
+        aria-label="Gerar receita com IA"
+      >
+        <span className={styles.fabIcon}>✦</span>
+        <span className={styles.fabLabel}>IA</span>
+      </button>
 
       {mostrar && (
-        <div className={styles.popup1}>
-          <button 
-            className={styles.botaoFechar} 
-            onClick={() => setMostrar(false)}
-          >
-            &times;
-          </button>
+        <div className={styles.overlay} onClick={() => setMostrar(false)}>
+          <div className={styles.popup} onClick={(e) => e.stopPropagation()}>
+            <button className={styles.fechar} onClick={() => setMostrar(false)}>×</button>
 
-          <h3>Quais ingredientes você tem?</h3>
+            <div className={styles.popupHeader}>
+              <span className={styles.badge}>✦ IA</span>
+              <h3 className={styles.popupTitulo}>Quais ingredientes você tem?</h3>
+              <p className={styles.popupSub}>Um por linha ou separados por vírgula</p>
+            </div>
 
-          <textarea
-            className={styles.input1}
-            value={texto}
-            onChange={(e) => setTexto(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && e.shiftKey) {
-                e.target.style.height = "auto";
-                const maxHeight = 200;
-                e.target.style.height = Math.min(e.target.scrollHeight, maxHeight) + "px";
-              }
-            }}
-            rows={1}
-          />
-          <button  className={styles.botaoEnviar} onClick={enviar}>Gerar</button>
+            <textarea
+              className={styles.textarea}
+              value={texto}
+              onChange={(e) => setTexto(e.target.value)}
+              placeholder="Ex: tomate, ovos, queijo..."
+              rows={5}
+            />
+
+            <button
+              className={styles.btnGerar}
+              onClick={enviar}
+              disabled={carregando || !texto.trim()}
+            >
+              {carregando ? <span className={styles.loadDot} /> : "Gerar receita →"}
+            </button>
+          </div>
         </div>
       )}
 
       {receita && (
-        <div className={styles.popupResultado}>
-          
-          <h2>{receita.titulo}</h2>
+        <div className={styles.overlay} onClick={() => setReceita(null)}>
+          <div className={styles.resultado} onClick={(e) => e.stopPropagation()}>
+            <button className={styles.fechar} onClick={() => setReceita(null)}>×</button>
 
-          <h4>Ingredientes:</h4>
-          <ul>
-            {receita.ingredientes.map((item, i) => (
-              <li key={i}>{item}</li>
-            ))}
-          </ul>
+            <span className={styles.badge}>✦ Receita gerada</span>
+            <h2 className={styles.receitaTitulo}>{receita.titulo}</h2>
 
-          <h4>Modo de preparo:</h4>
-          <ol>
-            {receita.instrucao.map((item, i) => (
-              <li key={i}>{item}</li>
-            ))}
-          </ol>
+            <div className={styles.metaRow}>
+              {receita.tempo_preparo && (
+                <span className={styles.pill}>{receita.tempo_preparo}</span>
+              )}
+              {receita.calorias && (
+                <span className={styles.pill}>{receita.calorias} kcal</span>
+              )}
+            </div>
 
-          <p><strong>Tempo:</strong> {receita.tempo_preparo}</p>
-          <p><strong>Calorias:</strong> {receita.calorias}</p>
+            <div className={styles.secao}>
+              <h4 className={styles.secaoLabel}>Ingredientes</h4>
+              <ul className={styles.lista}>
+                {receita.ingredientes.map((item, i) => (
+                  <li key={i}>{item}</li>
+                ))}
+              </ul>
+            </div>
 
-          <div className={styles.botoes}>
-            <button onClick={async() => {await prepararESalvarReceita(receita, tipo); setReceita(null);}}>
-               Salvar
-            </button>
+            <div className={styles.secao}>
+              <h4 className={styles.secaoLabel}>Modo de preparo</h4>
+              <ol className={styles.lista}>
+                {receita.instrucao.map((item, i) => (
+                  <li key={i}>{item}</li>
+                ))}
+              </ol>
+            </div>
 
-            <button onClick={() => setReceita(null)}>
-              Cancelar
-            </button>
+            <div className={styles.botoes}>
+              <button className={styles.btnCancelar} onClick={() => setReceita(null)}>
+                Descartar
+              </button>
+              <button 
+                className={styles.btnSalvar} 
+                onClick={salvar} 
+                disabled={salvando}
+              >
+                {salvando ? "Salvando…" : "Salvar receita"}
+              </button>
+            </div>
           </div>
-
         </div>
       )}
     </>

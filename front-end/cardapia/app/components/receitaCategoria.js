@@ -1,191 +1,186 @@
 "use client";
-import { useState } from "react";
+
+import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-  buscarReceitas,
-  deletarReceita,
-  atualizarReceita,
-} from "@/lib/api";
-import Image from "next/image";
-import styles from "@/app/principal/principal.module.css"
+import { buscarReceitas, deletarReceita, atualizarReceita } from "@/lib/api";
+import styles from "./receitaCategoria.module.css";
 
-export default function PaginaCategoria({ tipo }) {
+export default function ReceitaCategoria({ tipo }) {
   const queryClient = useQueryClient();
+  
+  // Estados Locais
   const [receitaSelecionada, setReceitaSelecionada] = useState(null);
+  const [editandoId, setEditandoId] = useState(null);
+  const [novoTitulo, setNovoTitulo] = useState("");
 
+  // Queries (Busca de dados)
   const { data, isLoading, error } = useQuery({
     queryKey: ["receitas", tipo],
     queryFn: () => buscarReceitas(tipo),
   });
 
+  // Mutações (Excluir)
   const mutationExcluir = useMutation({
     mutationFn: deletarReceita,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["receitas", tipo] });
-      alert("Receita excluída!");
-    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["receitas", tipo] }),
   });
 
+  // Mutações (Editar)
   const mutationEditar = useMutation({
-    mutationFn: ({ objectId, novoTitulo }) =>
-      atualizarReceita(objectId, { titulo: novoTitulo }),
+    mutationFn: ({ objectId, titulo }) => atualizarReceita(objectId, { titulo }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["receitas", tipo] });
-      alert("Título atualizado!");
+      setEditandoId(null);
     },
   });
 
-  const handleEditar = (objectId, tituloAtual) => {
-    const novoTitulo = prompt("Digite o novo título:", tituloAtual);
-    if (novoTitulo && novoTitulo !== tituloAtual) {
-      mutationEditar.mutate({ objectId, novoTitulo });
+  // Lógica de manipulação
+  const iniciarEdicao = (receita) => {
+    setEditandoId(receita.objectId);
+    setNovoTitulo(receita.titulo);
+  };
+
+  const confirmarEdicao = (objectId) => {
+    if (novoTitulo.trim()) {
+      mutationEditar.mutate({ objectId, titulo: novoTitulo.trim() });
     }
   };
 
-  if (isLoading) return <p>Carregando receitas de {tipo}...</p>;
-  if (error) return <p>Erro: {error.message}</p>;
+  const lista = data || [];
 
-  const listaDeReceitas = data || [];
+  if (isLoading) return (
+    <div className={styles.estado}>
+      <div className={styles.spinner} />
+      <p>Carregando receitas de {tipo}…</p>
+    </div>
+  );
 
-
+  if (error) return (
+    <div className={styles.estado}>
+      <p className={styles.erro}>Erro ao carregar: {error.message}</p>
+    </div>
+  );
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", padding: "20px" }}>
-      <div
-        style={{
-          margin: "5% 0",
-          color: "#575656",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          width: "100%",
-          gap: "5%",
-        }}
-      >
-        <div
-          style={{
-            width: "40%",
-            height: "2px",
-            backgroundColor: "#575656",
-          }}
-        ></div>
+    <div className={styles.page}>
+      {/* Seção Hero */}
+      <header className={styles.hero}>
+        <h1 className={styles.heroTitulo}>{tipo}</h1>
+        <p className={styles.heroSub}>
+          {lista.length} receita{lista.length !== 1 ? "s" : ""} salva{lista.length !== 1 ? "s" : ""}
+        </p>
+      </header>
 
-        <h2>{tipo}</h2>
+      <main className={styles.content}>
+        {lista.length === 0 ? (
+          <div className={styles.vazio}>
+            <p>Nenhuma receita de {tipo} ainda.</p>
+            <p>Use o botão IA para gerar a primeira! 🌿</p>
+          </div>
+        ) : (
+          <div className={styles.grid}>
+            {lista.map((receita) => (
+              <div key={receita.objectId} className={styles.card}>
+                
+                <div className={styles.cardHeader}>
+                  {editandoId === receita.objectId ? (
+                    <input
+                      className={styles.editInput}
+                      value={novoTitulo}
+                      onChange={(e) => setNovoTitulo(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") confirmarEdicao(receita.objectId);
+                        if (e.key === "Escape") setEditandoId(null);
+                      }}
+                      autoFocus
+                    />
+                  ) : (
+                    <h3 className={styles.cardTitulo}>{receita.titulo}</h3>
+                  )}
 
-        <div
-          style={{
-            width: "40%",
-            height: "2px",
-            backgroundColor: "#575656",
-          }}
-        ></div>
-      </div>
-      
-      <div style={{ display: "grid", gap: "15px" }}>
-        {listaDeReceitas.map((receita) => (
-          <div
-            key={receita.objectId}
-            style={{
-              width: "40vh",
-              border: "1px solid #ccc",
-              padding: "15px",
-              borderRadius: "8px",
-            }}
-          >
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <h3>{receita.titulo}</h3>
+                  <div className={styles.acoes}>
+                    {editandoId === receita.objectId ? (
+                      <>
+                        <button
+                          className={`${styles.acaoBtn} ${styles.confirmar}`}
+                          onClick={() => confirmarEdicao(receita.objectId)}
+                        >✓</button>
+                        <button
+                          className={`${styles.acaoBtn} ${styles.cancelar}`}
+                          onClick={() => setEditandoId(null)}
+                        >✕</button>
+                      </>
+                    ) : (
+                      <>
+                        <button
+                          className={styles.acaoBtn}
+                          onClick={() => iniciarEdicao(receita)}
+                          title="Editar título"
+                        >
+                          <img src="/edit-gray.png" alt="editar" width="16" height="16" />
+                        </button>
+                        <button
+                          className={`${styles.acaoBtn} ${styles.deletar}`}
+                          onClick={() => mutationExcluir.mutate(receita.objectId)}
+                          title="Excluir receita"
+                          disabled={mutationExcluir.isPending}
+                        >
+                          <img src="/delete.png" alt="deletar" width="16" height="16" />
+                        </button>
+                      </>
+                    )}
+                  </div>
+                </div>
 
-              <div style={{ display: "flex", gap: "10px" }}>
+                <div className={styles.meta}>
+                  {receita.tempo_preparo && (
+                    <span className={styles.pill}>{receita.tempo_preparo}</span>
+                  )}
+                  {receita.calorias && (
+                    <span className={styles.pill}>{receita.calorias} kcal</span>
+                  )}
+                </div>
+
                 <button
-                  onClick={() =>
-                    handleEditar(receita.objectId, receita.titulo)
-                  }
-                  style={{ background: "none", border: "none" }}
+                  className={styles.verBtn}
+                  onClick={() => setReceitaSelecionada(receita)}
                 >
-                  <Image src="/edit-gray.png" alt="editar" width={20} height={20} />
-                </button>
-
-                <button
-                  onClick={() =>
-                    mutationExcluir.mutate(receita.objectId)
-                  }
-                  style={{ background: "none", border: "none" }}
-                >
-                  <Image src="/delete.png" alt="deletar" width={20} height={20} />
+                  Ver receita
                 </button>
               </div>
-            </div>
-
-            <button
-              onClick={() => setReceitaSelecionada(receita)}
-              style={{
-                marginTop: "10px",
-                padding: "10px 16px",
-                borderRadius: "8px",
-                border: "none",
-                background: "linear-gradient(135deg, #00e67b, #059150)",
-                color: "white",
-                fontWeight: "600",
-                cursor: "pointer",
-                transition: "0.3s",
-              }}
-              onMouseOver={(e) => (e.target.style.opacity = "0.85")}
-              onMouseOut={(e) => (e.target.style.opacity = "1")}
-            >
-              Ver Receita
-            </button>
+            ))}
           </div>
-        ))}
-      </div>
+        )}
+      </main>
 
       {receitaSelecionada && (
-        <div style={modalOverlayStyle}>
-          <div style={modalContentStyle}>
-            <h2>{receitaSelecionada.titulo}</h2>
-            <hr />
+        <div className={styles.overlay} onClick={() => setReceitaSelecionada(null)}>
+          <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+            <button className={styles.fecharModal} onClick={() => setReceitaSelecionada(null)}>×</button>
 
-            <p><strong>Ingredientes:</strong></p>
-            <pre style={{ whiteSpace: "pre-wrap" }}>
-              {receitaSelecionada.ingredientes}
-            </pre>
+            <h2 className={styles.modalTitulo}>{receitaSelecionada.titulo}</h2>
 
-            <p><strong>Instruções:</strong></p>
-            <pre style={{ whiteSpace: "pre-wrap" }}>
-              {receitaSelecionada.instrucao}
-            </pre>
+            <div className={styles.modalMeta}>
+              {receitaSelecionada.tempo_preparo && (
+                <span className={styles.pill}>{receitaSelecionada.tempo_preparo}</span>
+              )}
+              {receitaSelecionada.calorias && (
+                <span className={styles.pill}>{receitaSelecionada.calorias} kcal</span>
+              )}
+            </div>
 
-            <p><strong>Tempo:</strong> {receitaSelecionada.tempo_preparo}</p>
-            <p><strong>Calorias:</strong> {receitaSelecionada.calorias} kcal</p>
+            <section className={styles.modalSecao}>
+              <h4 className={styles.modalLabel}>Ingredientes</h4>
+              <p className={styles.modalTexto}>{receitaSelecionada.ingredientes}</p>
+            </section>
 
-            <button onClick={() => setReceitaSelecionada(null)}>
-              Fechar
-            </button>
+            <section className={styles.modalSecao}>
+              <h4 className={styles.modalLabel}>Modo de preparo</h4>
+              <p className={styles.modalTexto}>{receitaSelecionada.instrucao}</p>
+            </section>
           </div>
         </div>
       )}
     </div>
   );
 }
-
-const modalOverlayStyle = {
-  position: "fixed",
-  top: 0,
-  left: 0,
-  width: "100%",
-  height: "100%",
-  backgroundColor: "rgba(0,0,0,0.7)",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  zIndex: 1000,
-};
-
-const modalContentStyle = {
-  backgroundColor: "white",
-  padding: "30px",
-  borderRadius: "12px",
-  maxWidth: "500px",
-  width: "90%",
-  maxHeight: "80vh",
-  overflowY: "auto",
-};

@@ -1,5 +1,5 @@
 import { Poppins } from "next/font/google";
-import "./dicas.css";
+import "./dicas.module.css";
 import Intro from "../components/intro";
 
 export default function RootLayout({ children }) {
