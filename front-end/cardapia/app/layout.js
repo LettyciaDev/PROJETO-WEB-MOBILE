@@ -1,5 +1,6 @@
-import { Poppins } from 'next/font/google';
+import { Poppins } from "next/font/google";
 import "./globals.css";
+import Providers from './providers'
 
 export const metadata = {
   title: "Cardapia",
@@ -9,19 +10,20 @@ export const metadata = {
   },
 };
 
-
 const poppins = Poppins({
-  subsets: ['latin'],
-  weight: ['400', '600', '700'], // Defina os pesos que você vai usar
-  variable: '--font-poppins',    // Cria uma variável CSS
+  subsets: ["latin"],
+  weight: ["400", "600", "700"], // Defina os pesos que você vai usar
+  variable: "--font-poppins", // Cria uma variável CSS
 });
 
 export default function RootLayout({ children }) {
+
   return (
     <html lang="pt-br">
       <body className={`${poppins.variable} font-sans`}>
-        {children}
-        <link></link>
+          <Providers>
+            {children}
+         </Providers>
       </body>
     </html>
   );

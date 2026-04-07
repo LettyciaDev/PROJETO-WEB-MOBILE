@@ -1,54 +1,89 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
-import styles from "./principal.comite.css"
+import Navbar from "../components/navbar";
+import Intro from "../components/intro";
+import styles from "../principal/principal.module.css"
+export default function Home() {
+  return (
+    <div className="container">
+      <Intro />
 
-export default function Home(){
-    return (
-        <div className="container">
-          <div className="hero">
-            <div className="hero-container">
-                <div className="hero-description">
-                    <div className="hero-text">
-                        <p>Bem vindo, <span>Usuário</span></p>
-                        <p>Peso Atual: 58.4kg</p>
-                    </div>
-                    <div className="hero-img"><Image src="/user.png" alt="icone perfil" width={50} height={50}/></div>
-                </div>
-            </div>
-          </div>
-
-                <div className="main">
-                    <div className="main-container">
-                        <div className="main-box">
-                            <div className="trapezio"><Image/></div>
-                            <h1>LANCHES</h1>
-                        </div>
-                        <div className="main-box">
-                            <div><Image/></div>
-                            <h1>CAFÉ DA MANHÃ</h1>
-                        </div>
-                        <div className="main-box">
-                            <div><Image/></div>
-                            <h1>ALMOÇO</h1>
-                        </div>
-                        <div className="main-box">
-                            <div><Image/></div>
-                            <h1>JANTA</h1>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="navbar">
-                    <div className="navbar-container">
-                        <Image src="/home.png" alt="home" width={40} height={40}/>
-                        <p>MENU</p>              
-                    </div>
-                    <div  className="navbar-container">
-                        <Image src="/tip.png" alt="tip" width={40} height={40}/>
-                        <p>DICAS</p>
-                    </div>
-                </div>            
-       
+      <div className="main">
+        <div className="title">
+          <div className="line"></div>
+          <h2>HOME</h2>
+          <div className="line"></div>
         </div>
-    );
+
+        <div className={styles["navbar-desk"]}>
+          <ul>
+            <li className={styles["menu"]}>
+              <Link href="/principal" className={styles["main-box"]}>
+                MENU
+              </Link>
+            </li>
+            <li>
+              <Link href="/dicas" className={styles["main-box"]}>
+                DICAS
+              </Link>
+            </li>
+          </ul>
+        </div>
+
+        <div className={styles["main-container"]}>
+          <Link href="/refeicoes/lanche" className={styles["main-box"]}>
+            <Image src="/lanche.png" alt="lanche" width={90} height={90} />
+            <div className={styles["box-text"]}>
+              <h1>LANCHES</h1>
+              <p>ver receitas</p>
+            </div>
+            <Image src="/setadir.png" alt="seta direita" width={30} height={30} />
+          </Link>
+
+          <Link href="/refeicoes/cafe" className={styles["main-box"]}>
+            <Image src="/cafe.png" alt="cafe da manhã" width={90} height={90} />
+            <div className={styles["box-text"]}>
+              <h1>Café da manhã</h1>
+              <p>ver receitas</p>
+            </div>
+            <Image src="/setadir.png" alt="seta direita" width={30} height={30} />
+          </Link>
+
+          <Link href="/refeicoes/almoco" className={styles["main-box"]}>
+            <Image src="/almoco.png" alt="almoço" width={90} height={90} />
+            <div className={styles["box-text"]}>
+              <h1>Almoço</h1>
+              <p>ver receitas</p>
+            </div>
+            <Image src="/setadir.png" alt="seta direita" width={30} height={30} />
+          </Link>
+
+          <Link href="/refeicoes/janta" className={styles["main-box"]}>
+            <Image src="/janta.png" alt="janta" width={90} height={90} />
+            <div className={styles["box-text"]}>
+              <h1>Janta</h1>
+              <p>ver receitas</p>
+            </div>
+            <Image src="/setadir.png" alt="seta direita" width={30} height={30} />
+          </Link>
+        </div>
+      </div>
+
+      <div className={styles["navbar"]}>
+          <div className={styles["navbar-container"]}>       
+                   <Link href="/principal" className={styles["main-box"]}>
+                      <Image src="/home.png" alt="home" width={40} height={40}/>
+                      <p>MENU</p>
+                  </Link>       
+          </div>
+          <div  className={styles["navbar-container"]}>
+                  <Link href="/dicas" className={styles["main-box"]}>
+                      <Image src="/tip.png" alt="tip" width={40} height={40}/>
+                      <p>DICAS</p>
+                  </Link>
+          </div>
+      </div>            
+    </div>
+  );
 }

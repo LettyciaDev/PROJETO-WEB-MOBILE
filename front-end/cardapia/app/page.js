@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import "./entrar/entrar.comite.css";
 
 export default function Home() {
   return (
@@ -19,9 +20,7 @@ export default function Home() {
             <h2>
               Sua despensa pode ser o ponto de partida para receitas incríveis!
             </h2>
-            <p>
-              Faça seu login ou cadastre-se e aproveite a experiência.
-            </p>
+            <p>Faça seu login ou cadastre-se e aproveite a experiência.</p>
           </div>
 
           <div className="actions">
@@ -33,11 +32,8 @@ export default function Home() {
               Cadastrar
             </Link>
           </div>
-
         </div>
-
       </div>
-
     </main>
   );
 }
