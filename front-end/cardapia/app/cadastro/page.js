@@ -5,8 +5,8 @@ import { useRouter } from 'next/navigation';
 import Parse from 'parse';
 import './cadastro.compile.css'; 
 
-const APP_ID ='';
-const JS_KEY =''; 
+const APP_ID ='mmdgUUMfzBrInhwWfSDp3oFJW3gJGHyoXE4smW0Y';
+const JS_KEY ='E5v7T9NIy5N7rFWxE82e3RFooyN8EG7HfIgXeR03';
 
 Parse.initialize(APP_ID, JS_KEY);
 Parse.serverURL = 'https://parseapi.back4app.com/';

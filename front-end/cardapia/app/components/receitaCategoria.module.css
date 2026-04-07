@@ -43,7 +43,6 @@
   color: rgba(255,255,255,0.78);
 }
 
-/* ── CONTENT SHEET ── */
 .content {
   background: var(--surface, #fff);
   border-radius: 34px 34px 0 0;
@@ -52,7 +51,6 @@
   padding: 28px 20px 120px;
 }
 
-/* ── GRID ── */
 .grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -68,7 +66,6 @@
   .grid { grid-template-columns: 1fr 1fr; gap: 16px; }
 }
 
-/* ── CARD ── */
 .card {
   background: var(--surface-soft, #f7fbf7);
   border: 1px solid var(--border, #e0ede0);
@@ -114,7 +111,6 @@
   outline: none;
 }
 
-/* ações */
 .acoes {
   display: flex;
   gap: 4px;
@@ -142,7 +138,6 @@
 
 .deletar:hover { background: #fff5f5; border-color: #ffcdd2; }
 
-/* meta pills */
 .meta { display: flex; flex-wrap: wrap; gap: 6px; }
 
 .pill {
@@ -155,7 +150,6 @@
   padding: 3px 10px;
 }
 
-/* ver receita */
 .verBtn {
   margin-top: auto;
   padding: 10px 0;
@@ -172,7 +166,6 @@
 
 .verBtn:hover { opacity: 0.88; transform: translateY(-1px); }
 
-/* ── ESTADOS ── */
 .estado {
   min-height: 200px;
   display: flex;
@@ -204,7 +197,6 @@
   line-height: 2;
 }
 
-/* ── MODAL ── */
 .overlay {
   position: fixed;
   inset: 0;

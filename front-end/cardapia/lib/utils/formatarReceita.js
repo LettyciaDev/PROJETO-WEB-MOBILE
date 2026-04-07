@@ -1,6 +1,6 @@
 import { salvarReceita } from "@/lib/api";
 
-export async function prepararESalvarReceita(receitaOriginal, categoria) {
+export async function prepararESalvarReceita(receitaOriginal, categoria, userId) {
   const receitaFormatada = {
     ...receitaOriginal,
 
@@ -15,5 +15,5 @@ export async function prepararESalvarReceita(receitaOriginal, categoria) {
     categoria,
   };
 
-  return await salvarReceita(receitaFormatada);
+  return await salvarReceita(receitaFormatada, userId);
 }

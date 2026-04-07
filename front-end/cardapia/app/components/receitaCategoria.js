@@ -1,13 +1,29 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { buscarReceitas, deletarReceita, atualizarReceita } from "@/lib/api";
 import styles from "./receitaCategoria.module.css";
 
 export default function ReceitaCategoria({ tipo }) {
+  const [mounted, setMounted] = useState(false);
   const queryClient = useQueryClient();
-  
+
+ 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+ 
+
+  const getUserId = () => {
+    if (typeof window === "undefined") return null;
+    const chave = "Parse/mmdgUUMfzBrInhwWfSDp3oFJW3gJGHyoXE4smW0Y/currentUser";
+    const user = JSON.parse(localStorage.getItem(chave));
+    return user?.objectId || null;
+  };
+
+  const userId = getUserId();
+
   // Estados Locais
   const [receitaSelecionada, setReceitaSelecionada] = useState(null);
   const [editandoId, setEditandoId] = useState(null);
@@ -15,26 +31,28 @@ export default function ReceitaCategoria({ tipo }) {
 
   // Queries (Busca de dados)
   const { data, isLoading, error } = useQuery({
-    queryKey: ["receitas", tipo],
-    queryFn: () => buscarReceitas(tipo),
+    queryKey: ["receitas", tipo, userId], 
+    queryFn: () => buscarReceitas(tipo, userId),
+    enabled: mounted && !!userId,
   });
 
   // Mutações (Excluir)
   const mutationExcluir = useMutation({
     mutationFn: deletarReceita,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["receitas", tipo] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["receitas", tipo, userId] });
+    },
   });
 
   // Mutações (Editar)
   const mutationEditar = useMutation({
     mutationFn: ({ objectId, titulo }) => atualizarReceita(objectId, { titulo }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["receitas", tipo] });
+      queryClient.invalidateQueries({ queryKey: ["receitas", tipo, userId] });
       setEditandoId(null);
     },
   });
 
-  // Lógica de manipulação
   const iniciarEdicao = (receita) => {
     setEditandoId(receita.objectId);
     setNovoTitulo(receita.titulo);
@@ -45,6 +63,12 @@ export default function ReceitaCategoria({ tipo }) {
       mutationEditar.mutate({ objectId, titulo: novoTitulo.trim() });
     }
   };
+
+  if (!userId) return (
+    <div className={styles.estado}>
+      <p>Você precisa estar logado para ver suas receitas.</p>
+    </div>
+  );
 
   const lista = data || [];
 

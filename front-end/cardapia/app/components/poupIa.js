@@ -40,12 +40,23 @@ export default function PopupIA({ tipo }) {
   };
 
   const salvar = async () => {
-    try {
-      setSalvando(true);
-      await prepararESalvarReceita(receita, tipo);
-      setReceita(null); // Fecha o resultado após salvar
+   try {
+    setSalvando(true);
+
+      // O Parse busca automaticamente naquela chave gigante para você
+      const currentUser = Parse.User.current();
+      const usuarioLogado = currentUser?.id; // O SDK já mapeia o objectId para .id
+
+      if (!usuarioLogado) {
+        alert("Usuário não encontrado. Verifique se você está logado!");
+        return;
+      }
+
+      await prepararESalvarReceita(receita, tipo, usuarioLogado);
+      setReceita(null);
+      alert("Receita salva!");
     } catch (err) {
-      console.error("Erro ao salvar:", err);
+      console.error(err);
     } finally {
       setSalvando(false);
     }
@@ -112,9 +123,12 @@ export default function PopupIA({ tipo }) {
             <div className={styles.secao}>
               <h4 className={styles.secaoLabel}>Ingredientes</h4>
               <ul className={styles.lista}>
-                {receita.ingredientes.map((item, i) => (
-                  <li key={i}>{item}</li>
-                ))}
+                {(typeof receita.ingredientes === "string" 
+                    ? receita.ingredientes.split(", ") 
+                    : receita.ingredientes
+                  ).map((item, i) => (
+                    <li key={i}>{item}</li>
+                  ))}
               </ul>
             </div>
 
