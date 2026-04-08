@@ -9,20 +9,15 @@ export default function ReceitaCategoria({ tipo }) {
   const [mounted, setMounted] = useState(false);
   const queryClient = useQueryClient();
 
- 
   useEffect(() => {
     setMounted(true);
-  }, []);
- 
 
-  const getUserId = () => {
-    if (typeof window === "undefined") return null;
     const chave = "Parse/mmdgUUMfzBrInhwWfSDp3oFJW3gJGHyoXE4smW0Y/currentUser";
     const user = JSON.parse(localStorage.getItem(chave));
-    return user?.objectId || null;
-  };
+    setUserId(user?.objectId || null);
+  }, []);
 
-  const userId = getUserId();
+  const [userId, setUserId] = useState(null);
 
   // Estados Locais
   const [receitaSelecionada, setReceitaSelecionada] = useState(null);
@@ -31,7 +26,7 @@ export default function ReceitaCategoria({ tipo }) {
 
   // Queries (Busca de dados)
   const { data, isLoading, error } = useQuery({
-    queryKey: ["receitas", tipo, userId], 
+    queryKey: ["receitas", tipo, userId],
     queryFn: () => buscarReceitas(tipo, userId),
     enabled: mounted && !!userId,
   });
@@ -46,7 +41,8 @@ export default function ReceitaCategoria({ tipo }) {
 
   // Mutações (Editar)
   const mutationEditar = useMutation({
-    mutationFn: ({ objectId, titulo }) => atualizarReceita(objectId, { titulo }),
+    mutationFn: ({ objectId, titulo }) =>
+      atualizarReceita(objectId, { titulo }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["receitas", tipo, userId] });
       setEditandoId(null);
@@ -64,26 +60,29 @@ export default function ReceitaCategoria({ tipo }) {
     }
   };
 
-  if (!userId) return (
-    <div className={styles.estado}>
-      <p>Você precisa estar logado para ver suas receitas.</p>
-    </div>
-  );
+  if (!userId)
+    return (
+      <div className={styles.estado}>
+        <p>Você precisa estar logado para ver suas receitas.</p>
+      </div>
+    );
 
   const lista = data || [];
 
-  if (isLoading) return (
-    <div className={styles.estado}>
-      <div className={styles.spinner} />
-      <p>Carregando receitas de {tipo}…</p>
-    </div>
-  );
+  if (isLoading)
+    return (
+      <div className={styles.estado}>
+        <div className={styles.spinner} />
+        <p>Carregando receitas de {tipo}…</p>
+      </div>
+    );
 
-  if (error) return (
-    <div className={styles.estado}>
-      <p className={styles.erro}>Erro ao carregar: {error.message}</p>
-    </div>
-  );
+  if (error)
+    return (
+      <div className={styles.estado}>
+        <p className={styles.erro}>Erro ao carregar: {error.message}</p>
+      </div>
+    );
 
   return (
     <div className={styles.page}>
@@ -91,7 +90,8 @@ export default function ReceitaCategoria({ tipo }) {
       <header className={styles.hero}>
         <h1 className={styles.heroTitulo}>{tipo}</h1>
         <p className={styles.heroSub}>
-          {lista.length} receita{lista.length !== 1 ? "s" : ""} salva{lista.length !== 1 ? "s" : ""}
+          {lista.length} receita{lista.length !== 1 ? "s" : ""} salva
+          {lista.length !== 1 ? "s" : ""}
         </p>
       </header>
 
@@ -105,7 +105,6 @@ export default function ReceitaCategoria({ tipo }) {
           <div className={styles.grid}>
             {lista.map((receita) => (
               <div key={receita.objectId} className={styles.card}>
-                
                 <div className={styles.cardHeader}>
                   {editandoId === receita.objectId ? (
                     <input
@@ -113,7 +112,8 @@ export default function ReceitaCategoria({ tipo }) {
                       value={novoTitulo}
                       onChange={(e) => setNovoTitulo(e.target.value)}
                       onKeyDown={(e) => {
-                        if (e.key === "Enter") confirmarEdicao(receita.objectId);
+                        if (e.key === "Enter")
+                          confirmarEdicao(receita.objectId);
                         if (e.key === "Escape") setEditandoId(null);
                       }}
                       autoFocus
@@ -128,11 +128,15 @@ export default function ReceitaCategoria({ tipo }) {
                         <button
                           className={`${styles.acaoBtn} ${styles.confirmar}`}
                           onClick={() => confirmarEdicao(receita.objectId)}
-                        >✓</button>
+                        >
+                          ✓
+                        </button>
                         <button
                           className={`${styles.acaoBtn} ${styles.cancelar}`}
                           onClick={() => setEditandoId(null)}
-                        >✕</button>
+                        >
+                          ✕
+                        </button>
                       </>
                     ) : (
                       <>
@@ -141,15 +145,27 @@ export default function ReceitaCategoria({ tipo }) {
                           onClick={() => iniciarEdicao(receita)}
                           title="Editar título"
                         >
-                          <img src="/edit-gray.png" alt="editar" width="16" height="16" />
+                          <img
+                            src="/edit-gray.png"
+                            alt="editar"
+                            width="16"
+                            height="16"
+                          />
                         </button>
                         <button
                           className={`${styles.acaoBtn} ${styles.deletar}`}
-                          onClick={() => mutationExcluir.mutate(receita.objectId)}
+                          onClick={() =>
+                            mutationExcluir.mutate(receita.objectId)
+                          }
                           title="Excluir receita"
                           disabled={mutationExcluir.isPending}
                         >
-                          <img src="/delete.png" alt="deletar" width="16" height="16" />
+                          <img
+                            src="/delete.png"
+                            alt="deletar"
+                            width="16"
+                            height="16"
+                          />
                         </button>
                       </>
                     )}
@@ -178,29 +194,45 @@ export default function ReceitaCategoria({ tipo }) {
       </main>
 
       {receitaSelecionada && (
-        <div className={styles.overlay} onClick={() => setReceitaSelecionada(null)}>
+        <div
+          className={styles.overlay}
+          onClick={() => setReceitaSelecionada(null)}
+        >
           <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-            <button className={styles.fecharModal} onClick={() => setReceitaSelecionada(null)}>×</button>
+            <button
+              className={styles.fecharModal}
+              onClick={() => setReceitaSelecionada(null)}
+            >
+              ×
+            </button>
 
             <h2 className={styles.modalTitulo}>{receitaSelecionada.titulo}</h2>
 
             <div className={styles.modalMeta}>
               {receitaSelecionada.tempo_preparo && (
-                <span className={styles.pill}>{receitaSelecionada.tempo_preparo}</span>
+                <span className={styles.pill}>
+                  {receitaSelecionada.tempo_preparo}
+                </span>
               )}
               {receitaSelecionada.calorias && (
-                <span className={styles.pill}>{receitaSelecionada.calorias} kcal</span>
+                <span className={styles.pill}>
+                  {receitaSelecionada.calorias} kcal
+                </span>
               )}
             </div>
 
             <section className={styles.modalSecao}>
               <h4 className={styles.modalLabel}>Ingredientes</h4>
-              <p className={styles.modalTexto}>{receitaSelecionada.ingredientes}</p>
+              <p className={styles.modalTexto}>
+                {receitaSelecionada.ingredientes}
+              </p>
             </section>
 
             <section className={styles.modalSecao}>
               <h4 className={styles.modalLabel}>Modo de preparo</h4>
-              <p className={styles.modalTexto}>{receitaSelecionada.instrucao}</p>
+              <p className={styles.modalTexto}>
+                {receitaSelecionada.instrucao}
+              </p>
             </section>
           </div>
         </div>

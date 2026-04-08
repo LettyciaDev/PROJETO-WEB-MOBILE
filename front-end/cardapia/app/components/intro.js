@@ -1,19 +1,21 @@
 "use client";
 
+import Parse from "../../lib/parse";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import Parse from "parse";
 
 const APP_ID = "nacEQNOlY9wAtonJpl6RwipjP4llln00qLmVat4p";
 const JS_KEY = "jTtBnuRudxFDjYVfsDxpMYDdUNUvYvHuQempq0Po";
 
-Parse.initialize(APP_ID, JS_KEY);
-Parse.serverURL = "https://parseapi.back4app.com/";
-
 const STATS = [
   { key: "peso", icon: "/peso.png", label: "Peso", alt: "peso" },
-  { key: "exercicio", icon: "/exercicio.png", label: "Exercício", alt: "exercicio" },
+  {
+    key: "exercicio",
+    icon: "/exercicio.png",
+    label: "Exercício",
+    alt: "exercicio",
+  },
   { key: "objetivo", icon: "/meta.png", label: "Objetivo", alt: "meta" },
 ];
 
@@ -24,7 +26,7 @@ export default function Intro() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [username, setUsername] = useState("Usuário");
   const [email, setEmail] = useState("");
-  
+
   const [userData, setUserData] = useState({
     peso: "58.4 kg",
     exercicio: "3× / semana",
@@ -55,7 +57,6 @@ export default function Intro() {
     }
   };
 
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUserData((prev) => ({
@@ -75,7 +76,6 @@ export default function Intro() {
     <section className="hero-section">
       <div className="intro-container">
         <div className="intro-description">
-          
           <div className="intro-user">
             <button
               className="user-avatar-btn"
@@ -118,7 +118,7 @@ export default function Intro() {
             {STATS.map((stat) => (
               <div className="text-details" key={stat.key}>
                 <Image src={stat.icon} alt={stat.alt} width={18} height={18} />
-                
+
                 {isEditing ? (
                   <input
                     name={stat.key}
@@ -138,7 +138,6 @@ export default function Intro() {
               </div>
             ))}
           </div>
-
         </div>
       </div>
     </section>
