@@ -1,47 +1,94 @@
-const API = "/api/receitas";
+import Parse from "parse";
 
-export const salvarReceita = async (dados, userId) => {
-  const res = await fetch(`${API}?userId=${userId}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(dados),
-  });
+// Inicialização Parse
+if (!Parse.serverURL) {
+  Parse.initialize(
+    "mmdgUUMfzBrInhwWfSDp3oFJW3gJGHyoXE4smW0Y", // APP_ID
+    "E5v7T9NIy5N7rFWxE82e3RFooyN8EG7HfIgXeR03"  // JS_KEY
+  );
+  Parse.serverURL = "https://parseapi.back4app.com/";
+}
 
-  if (!res.ok) {
-    const erro = await res.json();
-    throw new Error(erro.error || "Erro ao salvar receita");
+// ============================
+// SALVAR RECEITA
+// ============================
+export const salvarReceita = async (dados, currentUser) => {
+  if (!currentUser) throw new Error("Usuário não definido");
+
+  const Receita = Parse.Object.extend("Receita");
+  const receita = new Receita();
+
+  receita.set("titulo", dados.titulo || "Receita");
+  receita.set("ingredientes", dados.ingredientes || "");
+  receita.set("instrucao", dados.instrucao || "");
+  receita.set("tempo_preparo", dados.tempo_preparo || "");
+  receita.set("calorias", dados.calorias || 0);
+  receita.set("categoria", dados.categoria || "");
+  receita.set("usuario", currentUser); // associa ao usuário logado
+
+  try {
+    const resultado = await receita.save();
+    return resultado.toJSON();
+  } catch (err) {
+    console.error("Erro ao salvar receita no Parse:", err);
+    throw new Error(err.message || "Erro ao salvar receita");
   }
-
-  return res.json();
 };
 
-export const buscarReceitas = async (categoria, userId) => {
-  if (!userId || userId === "undefined") {
-    console.warn("Busca cancelada: userId não definido.");
-    return []; 
+// ============================
+// BUSCAR RECEITAS
+// ============================
+export const buscarReceitas = async (categoria, currentUser) => {
+  if (!currentUser) return [];
+
+  const Receita = Parse.Object.extend("Receita");
+  const query = new Parse.Query(Receita);
+  query.equalTo("usuario", currentUser);
+  if (categoria) query.equalTo("categoria", categoria);
+
+  try {
+    const results = await query.find();
+    return results.map(r => r.toJSON());
+  } catch (err) {
+    console.error("Erro ao buscar receitas:", err);
+    return [];
   }
-
-  const params = new URLSearchParams();
-  if (categoria) params.append("categoria", categoria);
-  params.append("userId", userId);
-
-  const res = await fetch(`/api/receitas?${params.toString()}`);
-  return res.json();
 };
 
+// ============================
+// ATUALIZAR RECEITA
+// ============================
 export const atualizarReceita = async (id, dados) => {
-  const res = await fetch(`/api/receitas/${id}`, {
-    method: "PUT",
-    body: JSON.stringify(dados),
-  });
+  if (!id) throw new Error("ID da receita é obrigatório");
 
-  return res.json();
+  const Receita = Parse.Object.extend("Receita");
+  const query = new Parse.Query(Receita);
+
+  try {
+    const receita = await query.get(id);
+    Object.keys(dados).forEach(key => receita.set(key, dados[key]));
+    const resultado = await receita.save();
+    return resultado.toJSON();
+  } catch (err) {
+    console.error("Erro ao atualizar receita:", err);
+    throw new Error(err.message || "Erro ao atualizar receita");
+  }
 };
 
+// ============================
+// DELETAR RECEITA
+// ============================
 export const deletarReceita = async (id) => {
-  await fetch(`/api/receitas/${id}`, {
-    method: "DELETE",
-  });
+  if (!id) throw new Error("ID da receita é obrigatório");
+
+  const Receita = Parse.Object.extend("Receita");
+  const query = new Parse.Query(Receita);
+
+  try {
+    const receita = await query.get(id);
+    await receita.destroy();
+  } catch (err) {
+    console.error("Erro ao deletar receita:", err);
+    throw new Error(err.message || "Erro ao deletar receita");
+  }
 };

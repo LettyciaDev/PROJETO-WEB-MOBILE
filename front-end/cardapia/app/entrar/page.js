@@ -1,52 +1,53 @@
-"use client";
+'use client';
 
 import { useState } from "react";
-import Image from "next/image";
+import { useRouter } from "next/navigation";
+import Parse from "parse";
 import "./entrar.comite.css";
 
-import { API_URL, HEADERS } from "../back4app";
+// Inicializa o Parse SDK
+const APP_ID = "mmdgUUMfzBrInhwWfSDp3oFJW3gJGHyoXE4smW0Y";
+const JS_KEY = "E5v7T9NIy5N7rFWxE82e3RFooyN8EG7HfIgXeR03";
 
-export default function Home() {
+Parse.initialize(APP_ID, JS_KEY);
+Parse.serverURL = "https://parseapi.back4app.com/";
+
+export default function LoginPage() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  async function handleLogin() {
+  const handleLogin = async () => {
     if (!email || !senha) {
       alert("Preencha todos os campos!");
       return;
     }
 
+    setLoading(true);
+
     try {
-      const response = await fetch(API_URL, {
-        method: "POST",
-        headers: HEADERS,
-        body: JSON.stringify({
-          username: email,  
-          password: senha,  
-        }),
-      });
+      // Login usando Parse SDK
+      const user = await Parse.User.logIn(email, senha);
 
-      const data = await response.json();
+      // usuário logado com sessão salva automaticamente
+      alert("Login realizado com sucesso!");
+      console.log("Usuário logado:", user.get("username"));
 
-      if (response.ok) {
-        alert("Login realizado com sucesso!");
-        console.log(data);
-
-        window.location.href = "/principal";
-      } else {
-        alert(data.error || "Erro ao fazer login");
-      }
+      router.push("/principal");
     } catch (error) {
-      console.error(error);
-      alert("Erro na requisição");
+      console.error("Erro no login:", error);
+      alert("Erro ao fazer login: " + error.message);
+    } finally {
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <main className="page-background">
       <div className="card">
         <div className="esquerda">
-          <Image
+          <img
             src="/imagens/cardapialogo.jpeg"
             alt="Ilustração de receitas"
             width={350}
@@ -64,7 +65,6 @@ export default function Home() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
-
             <input
               type="password"
               placeholder="Digite sua senha"
@@ -74,8 +74,8 @@ export default function Home() {
           </div>
 
           <div className="actions">
-            <button onClick={handleLogin} className="btn-principal">
-              Entrar
+            <button onClick={handleLogin} className="btn-principal" disabled={loading}>
+              {loading ? "Entrando..." : "Entrar"}
             </button>
           </div>
         </div>
