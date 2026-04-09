@@ -1,19 +1,22 @@
-import Link from "next/link";
+"use client";
 import Image from "next/image";
-import cardImage from "./cardImage.css";
+import styles from "./cardImage.module.css";
 
-export const CardImage = ({ image, alt, text, href }) => {
+export function CardImage({ image, alt, text, href }) {
   return (
-    <Link
-      href={href || "#"}
-      className="link"
+    <a
+      href={href}
       target="_blank"
       rel="noopener noreferrer"
+      className={styles.card}
     >
-      <div className="cards">
-        <Image src={image} alt={alt} width={107} height={92}></Image>
-        <p>{text}</p>
+      <div className={styles.imageWrap}>
+        <Image src={image} alt={alt} fill sizes="(max-width: 768px) 90vw, 400px" />
       </div>
-    </Link>
+      <div className={styles.body}>
+        <p>{text}</p>
+        <div className={styles.arrow}>→</div>
+      </div>
+    </a>
   );
-};
+}

@@ -1,0 +1,67 @@
+/* CardImage.module.css */
+.card {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface, #fff);
+  border: 1px solid var(--border, #e0ede0);
+  border-radius: 18px;
+  overflow: hidden;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  width: 100%;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 28px rgba(46, 125, 50, 0.12);
+}
+
+.imageWrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+}
+
+.imageWrap img {
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.card:hover .imageWrap img {
+  transform: scale(1.04);
+}
+
+.body {
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.body p {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary, #4a6b4c);
+  line-height: 1.45;
+  margin: 0;
+}
+
+.arrow {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--surface-muted, #eef6ee);
+  border: 1px solid var(--border, #e0ede0);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px;
+  color: var(--green-400, #4caf50);
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+
+.card:hover .arrow {
+  background: var(--green-200, #a5d6a7);
+  border-color: var(--green-200, #a5d6a7);
+  color: var(--green-600, #1b5e20);
+}

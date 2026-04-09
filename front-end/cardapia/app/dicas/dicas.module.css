@@ -1,0 +1,13 @@
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  width: 100%;
+}
+
+@media (min-width: 480px) {
+  .grid { grid-template-columns: 1fr 1fr; }
+  .hero-section{
+    display: none;
+  }
+}

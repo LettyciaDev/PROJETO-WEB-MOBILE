@@ -1,5 +1,6 @@
 // app/categorias/[tipo]/page.js
-import PaginaCategoria from '@/app/components/receitaCategoria'
+"use client";
+import PaginaCategoria from "@/app/components/receitaCategoria";
 import PopupIA from "@/app/components/poupIa";
 // O Next.js injeta o 'params' aqui automaticamente em Server Components
 export default function Page({ params }) {

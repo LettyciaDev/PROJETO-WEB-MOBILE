@@ -7,7 +7,7 @@ export async function POST(req) {
     if (!ingredientes) {
       return NextResponse.json(
         { erro: "Ingredientes não fornecidos" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -28,7 +28,7 @@ export async function POST(req) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-goog-api-key": process.env.GEMINI_API_KEY, 
+          "x-goog-api-key": "AIzaSyDS6fj6G1ka7IKXZuOPdK9iHNp7ug2S9b8",
         },
         body: JSON.stringify({
           contents: [
@@ -37,7 +37,7 @@ export async function POST(req) {
             },
           ],
         }),
-      }
+      },
     );
 
     const data = await response.json();
@@ -45,14 +45,10 @@ export async function POST(req) {
     console.log("RESPOSTA BRUTA:", JSON.stringify(data, null, 2));
     if (data.error) {
       console.error("ERRO DA GOOGLE API:", data.error);
-      return NextResponse.json(
-        { erro: data.error.message },
-        { status: 500 }
-      );
+      return NextResponse.json({ erro: data.error.message }, { status: 500 });
     }
 
-    const text =
-      data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
+    const text = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
 
     try {
       const json = JSON.parse(text);
@@ -63,15 +59,12 @@ export async function POST(req) {
           erro: "Resposta não veio em JSON",
           resposta: text,
         },
-        { status: 500 }
+        { status: 500 },
       );
     }
   } catch (error) {
     console.error("ERRO:", error);
 
-    return NextResponse.json(
-      { erro: error.message },
-      { status: 500 }
-    );
+    return NextResponse.json({ erro: error.message }, { status: 500 });
   }
 }
