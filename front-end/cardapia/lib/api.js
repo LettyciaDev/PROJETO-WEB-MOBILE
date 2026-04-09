@@ -38,13 +38,28 @@ export const salvarReceita = async (dados, currentUser) => {
 // ============================
 // BUSCAR RECEITAS
 // ============================
-export const buscarReceitas = async (categoria, currentUser) => {
-  if (!currentUser) return [];
+// No seu arquivo api.js
+
+export const buscarReceitas = async (categoria, userId) => {
+  if (!userId) return [];
 
   const Receita = Parse.Object.extend("Receita");
   const query = new Parse.Query(Receita);
-  query.equalTo("usuario", currentUser);
-  if (categoria) query.equalTo("categoria", categoria);
+
+  // MUDANÇA CRÍTICA: Transformar o ID string em um Pointer
+  const userPointer = {
+    __type: "Pointer",
+    className: "_User",
+    objectId: userId
+  };
+
+  query.equalTo("usuario", userPointer); // Agora ele filtra corretamente o dono da receita
+
+  if (categoria) {
+    query.equalTo("categoria", categoria);
+  }
+
+  query.descending("createdAt"); // Traz as mais novas primeiro
 
   try {
     const results = await query.find();

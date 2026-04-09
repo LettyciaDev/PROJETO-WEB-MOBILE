@@ -26,8 +26,9 @@ export async function criarReceita(data, userId) {
 }
 
 export async function listarReceitas(categoria, userId) {
-  let url = API_URL;
+  if (!userId) return [];
 
+  // 1. Montamos o objeto de busca (Query)
   const queryObj = {
     usuario: {
       "__type": "Pointer",
@@ -36,17 +37,37 @@ export async function listarReceitas(categoria, userId) {
     }
   };
 
+  // 2. Se houver categoria, adicionamos ao filtro
   if (categoria) {
     queryObj.categoria = categoria;
   }
 
-  const query = JSON.stringify(queryObj);
-  url += `?where=${encodeURIComponent(query)}`;
+  // 3. Transformamos o objeto em string e codificamos para a URL
+  const where = encodeURIComponent(JSON.stringify(queryObj));
+  
+  // 4. Adicionamos o parâmetro 'where' e ordenação (opcional: -createdAt traz as novas primeiro)
+  const finalUrl = `${API_URL}?where=${where}&order=-createdAt`;
 
-  const res = await fetch(url, { headers: HEADERS });
-  const data = await res.json();
+  try {
+    const res = await fetch(finalUrl, { 
+      method: "GET",
+      headers: HEADERS 
+    });
 
-  return data.results || [];
+    if (!res.ok) {
+      const errorText = await res.text();
+      console.error("Erro no Back4app:", errorText);
+      return [];
+    }
+
+    const data = await res.json();
+    
+    // O Back4app sempre retorna uma lista dentro da chave 'results'
+    return data.results || [];
+  } catch (error) {
+    console.error("Erro na requisição listarReceitas:", error);
+    return [];
+  }
 }
 
 export async function atualizarReceita(id, dados) {

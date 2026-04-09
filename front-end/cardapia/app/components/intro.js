@@ -51,7 +51,7 @@ export default function Intro() {
   const handleLogout = async () => {
     try {
       await Parse.User.logOut();
-      router.push("/cadastro");
+      router.push("/entrar");
     } catch (error) {
       alert("Não foi possível deslogar.");
     }
