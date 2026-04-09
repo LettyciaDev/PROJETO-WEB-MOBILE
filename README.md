@@ -1,12 +1,12 @@
-# 🍽️ Cardapia
+# Cardapia
 
 O **Cardapia** é uma aplicação web desenvolvida com o objetivo de sugerir receitas a partir dos ingredientes disponíveis na casa do usuário. A proposta do sistema é facilitar o dia a dia, ajudando na escolha de refeições de forma prática e contribuindo para a redução do desperdício de alimentos.
 
-A aplicação foi construída utilizando **React** ,**Next.js** e **CSS*, contando com autenticação de usuários via **Parse Server** e integração com inteligência artificial para geração de receitas personalizadas.
+A aplicação foi construída utilizando **React** ,**Next.js** e **CSS**, contando com autenticação de usuários via **Parse Server** e integração com inteligência artificial para geração de receitas personalizadas.
 
 ---
 
-## 👩‍💻 Integrantes
+## Integrantes
 
 - Lettycia Vitoria
 - Anna Beatriz
@@ -16,7 +16,7 @@ A aplicação foi construída utilizando **React** ,**Next.js** e **CSS*, contan
 
 ---
 
-## 📌 Funcionamento do Sistema
+##  Funcionamento do Sistema
 
 Ao acessar o sistema, o usuário visualiza uma página inicial com opções de login e cadastro. Caso não possua conta, pode se cadastrar informando nome de usuário, e-mail e senha. Após a autenticação, o usuário é redirecionado para a área principal do sistema.
 
@@ -26,7 +26,7 @@ Atualmente, a autenticação está implementada, enquanto as funcionalidades de 
 
 ---
 
-## 🚀 Funcionalidades
+## Funcionalidades
 - Cadastro de usuários  
 - Login de usuários  
 - Autenticação com sessão persistente  
@@ -34,7 +34,7 @@ Atualmente, a autenticação está implementada, enquanto as funcionalidades de 
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 - React  
 - Next.js  
@@ -44,27 +44,7 @@ Atualmente, a autenticação está implementada, enquanto as funcionalidades de 
 - API Gemini (Google AI)  
 
 ---
-
-## 📂 Estrutura do Projeto
-
-front-end/
-└── cardapia/
-└── app/
-├── cadastro/
-│ ├── page.js
-│ └── cadastro.compile.css
-├── entrar/
-│ ├── page.js
-│ └── entrar.comite.css
-├── principal/
-├── components/
-├── layout.js
-├── page.js
-└── globals.css
-
----
-
-## ⚙️ Como Executar o Projeto
+## Como Executar o Projeto
 
 Para rodar o projeto localmente, siga os passos abaixo:
 
